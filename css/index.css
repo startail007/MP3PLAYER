@@ -24,3 +24,336 @@ body{
     min-height: 600px;
 	max-height: 800px;
 }
+.appContent{
+	position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+}		
+.dragComponent{
+	position: absolute;
+	display: inline-block;
+}
+.dragBarComponent{			
+	position: relative;
+	display: inline-block;
+}
+.progressRate{
+	position: relative;
+	display: inline-block;
+	padding: 0px 5px;
+	box-sizing: border-box;
+	margin: 5px 0px;
+	width: 100%;
+}
+.progressRate .range{
+	position: relative;
+	display: block;
+	width: 100%;
+	/*height: 10px;*/
+	height: 0px;
+	/*margin: 10px 0px;*/
+	padding: 0px 0px;
+	box-sizing: border-box;
+}
+.progressRate .range .progress{			
+	position: absolute;
+	display: block;
+	width: 100%;
+	height: 2px;
+	border-radius: 2.5px;
+	margin-top: -1px;
+}
+.progressRate .range .progress:before{
+	content: "";
+	position: absolute;
+	display: block;
+	width: 100%;
+	height: 20px;
+	border-radius: 2.5px;
+	margin-top: -10px;
+	top: 1px;
+}
+.progressRate .range .progress .bg{			
+	position: absolute;
+	display: block;
+	background-color: #DEDEDE;
+	width: 100%;
+	height: 100%;
+}
+.progressRate .range .progress .rate{			
+	position: absolute;
+	display: block;
+	background-color: #413D3D;
+	width: 0%;
+	height: 100%;
+}		
+.progressRate .drag_btn{
+	position: absolute;
+	display: block;
+	width: 0px;
+	height: 0px;
+	top: 1px;
+}
+.progressRate .btn{
+	position: relative;
+	display: block;
+	width: 10px;
+	height: 10px;
+	background-color: #413D3D;
+	border-radius: 5px;
+	margin-left: -5px;
+	margin-top: -5px;
+}
+/*.titlePage{
+	position: relative;
+	display: block;
+	width: 100%;
+	height: 400px;
+}*/
+.content{
+	position: absolute;
+	display: block;
+	width: 100%;
+	bottom: 0px;
+	background-color: #fff;
+	padding: 0px 25px;
+	box-sizing: border-box;
+}
+.content:before{
+	content:"";
+	position: absolute;
+	display: block;
+	width: 100%;
+	height: 40px;
+	bottom: 100%;
+    background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0),#fff);
+	background-image: linear-gradient(rgba(255, 255, 255, 0),#fff);
+	left: 0%;
+	margin-bottom: -1px;
+}
+.page{
+	position: absolute;
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+.album{
+	position: absolute;
+	display: block;
+	width: 100%;
+	height: 100%;
+	background-image: url(../img/8C9Evy.png);
+	background-position: center top;
+	background-size: 100% auto;
+	background-repeat: no-repeat;
+}		
+.title{
+	position: relative;
+	display: inline-block;
+    text-align: center;
+    padding: 0px 0px;
+    margin-bottom: 20px;
+	width: 100%;
+}		
+.title .text{			
+    color: #413D3D;
+}
+#song{
+	font-size: 22px;
+	font-weight: bold;
+	line-height: 30px;
+}
+#singer{
+	font-size: 16px;
+	line-height: 24px;
+}
+.time{
+	position: relative;
+	display: inline-block;
+	font-size: 10px;
+	color: #AEAEAE;
+	height: 15px;
+    margin-bottom: 10px;
+	width: 100%;
+}
+.time .text{			
+	position: absolute;
+	display: inline-block;
+	height: 15px;
+}
+#currentTime{
+	left: 0%;
+}
+#totalTime{
+	right: 0%;
+}
+.control{
+	position: relative;
+    display: inline-flex;
+    height: 80px;
+    text-align: center;
+    line-height: 80px;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.control .btn{
+	position: relative;
+	display: inline-block;
+	width: 45px;
+	height: 45px;
+	border-radius: 45px;
+	vertical-align: middle;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+	transition: background-image .3s;
+}
+.control #btn_shufflePlayback{
+	background-image: url(../img/btn_shufflePlayback.svg);
+}
+.control #btn_shufflePlayback.active{
+	background-image: url(../img/btn_shufflePlaybackActive.svg);
+}
+.control #btn_rewind{
+	background-image: url(../img/btn_rewind.svg);
+}
+.control #btn_play{
+	background-image: url(../img/btn_play.svg);
+	width: 70px;
+	height: 70px;
+	border-radius: 70px;
+}
+.control #btn_play.playing{			
+	background-image: url(../img/btn_pause.svg);
+}
+.control #btn_fast{
+	background-image: url(../img/btn_fast.svg);
+}
+.control #btn_repeat{
+	background-image: url(../img/btn_repeat.svg);
+}
+.control #btn_repeat.all{
+	background-image: url(../img/btn_repeatAll.svg);
+}
+.control #btn_repeat.one{
+	background-image: url(../img/btn_repeatOne.svg);
+}
+
+#playList .content{
+	top: 100px;
+	background-color: rgba(255, 255, 255, 0.8);   
+	padding: 0px;
+}
+#playList .content:before{
+    background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0),rgba(255, 255, 255, 0.8));
+	background-image: linear-gradient(rgba(255, 255, 255, 0),rgba(255, 255, 255, 0.8));
+}
+.list{
+	position: absolute;
+	display: block;
+	width: 100%;
+	height: 100%;
+	overflow: auto; 
+}
+.item{
+	position: relative;
+	display: table;
+	height: 70px;		
+	padding: 0px 25px;
+	/*padding-right: 95px;*/
+	margin-bottom: 3px;
+	width: 100%;
+	box-sizing: border-box;
+	background-color: #fff;	
+}
+.itemContent{
+	position: relative;
+	display: table-cell;
+	vertical-align: middle;
+}
+.itemContent:after{
+	content: "";
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: #ddd;
+    left: 0;
+    bottom: -2px;
+}
+.item .song{
+	position: relative;
+	display: block;
+	color: #BBBBBB;
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 24px;
+}
+.item .singer{
+	position: relative;
+	display: block;
+	color: #DBDBDB;
+	font-size: 14px;
+	line-height: 18px;
+}		
+.item.active .song{
+	color: #413D3D
+}
+.item.active .singer{
+	color: #B2B2B2
+}
+
+.item .right{
+	position: absolute;
+	display: block;
+	height: 70px;
+	width: 70px;
+	right: 25px;
+	padding: 10px;
+	box-sizing: border-box;
+}
+.item .btn{			
+	position: relative;
+	display: block;
+	height: 100%;
+	width: 100%;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+	transition: background-image .3s;
+	background-image: url(../img/btn_small_play.svg);
+	border-radius: 70px;
+}
+.item .btn.playing{			
+	background-image: url(../img/btn_small_pause.svg);
+}
+.titleTop{
+	position: relative;
+	display: block;
+	margin-top: 20px;
+}
+.titleTop .text{
+	position: relative;
+	display: block;
+	font-size: 28px;
+	text-align: center;
+	line-height: 40px;
+	color: #fff;
+	text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25),0px 0px 20px rgba(0, 0, 0, 0.5);
+}
+.titleTop .btn{
+	position: absolute;
+	display: block;
+	width: 40px;
+	height: 40px;	
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;		
+	background-image: url(../img/btn_back.svg);
+	top: 0px;
+	left: 5px;
+}

@@ -13,225 +13,20 @@
 		[v-cloak] {
 			display: none;
 		}	
-		.appContent{
-			position: absolute;
-		    display: block;
-		    width: 100%;
-		    height: 100%;
-		}		
-		.dragComponent{
-			position: absolute;
-			display: inline-block;
-		}
-		.dragBarComponent{			
-			position: relative;
-			display: inline-block;
-		}
-		.progressRate{
-			position: relative;
-			display: inline-block;
-			padding: 0px 5px;
-			box-sizing: border-box;
-			margin: 5px 0px;
-			width: 100%;
-		}
-		.progressRate .range{
-			position: relative;
-			display: block;
-			width: 100%;
-			/*height: 10px;*/
-			height: 0px;
-			/*margin: 10px 0px;*/
-			padding: 0px 0px;
-    		box-sizing: border-box;
-		}
-		.progressRate .range .progress{			
-			position: absolute;
-			display: block;
-			width: 100%;
-			height: 2px;
-			border-radius: 2.5px;
-    		margin-top: -1px;
-		}
-		.progressRate .range .progress:before{
-			content: "";
-			position: absolute;
-			display: block;
-			width: 100%;
-			height: 20px;
-			border-radius: 2.5px;
-    		margin-top: -10px;
-    		top: 1px;
-		}
-		.progressRate .range .progress .bg{			
-			position: absolute;
-			display: block;
-			background-color: #DEDEDE;
-			width: 100%;
-			height: 100%;
-		}
-		.progressRate .range .progress .rate{			
-			position: absolute;
-			display: block;
-			background-color: #413D3D;
-			width: 0%;
-			height: 100%;
-		}		
-		.progressRate .drag_btn{
-			position: absolute;
-			display: block;
-			width: 0px;
-			height: 0px;
-    		top: 1px;
-		}
-		.progressRate .btn{
-			position: relative;
-			display: block;
-			width: 10px;
-			height: 10px;
-			background-color: #413D3D;
-			border-radius: 5px;
-    		margin-left: -5px;
-    		margin-top: -5px;
-		}
-		/*.titlePage{
-			position: relative;
-			display: block;
-			width: 100%;
-			height: 400px;
-		}*/
-		.content{
-			position: absolute;
-			display: block;
-			width: 100%;
-			bottom: 0px;
-			background-color: #fff;
-			padding: 0px 25px;
-			box-sizing: border-box;
-		}
-		.content:before{
-			content:"";
-			position: absolute;
-			display: block;
-			width: 100%;
-			height: 40px;
-			bottom: 100%;
-		    background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0),#fff);
-			background-image: linear-gradient(rgba(255, 255, 255, 0),#fff);
-			left: 0%;
-    		margin-bottom: -1px;
-		}
-		.page{
-			position: absolute;
-			display: block;
-			width: 100%;
-			height: 100%;
-			background-image: url(img/8C9Evy.png);
-			background-position: center top;
-			background-size: 100% auto;
-			background-repeat: no-repeat;
-		}		
-		.title{
-			position: relative;
-			display: inline-block;
-		    text-align: center;
-		    padding: 0px 0px;
-		    margin-bottom: 20px;
-			width: 100%;
-		}		
-		.title .text{			
-		    color: #413D3D;
-		}
-		#song{
-			font-size: 22px;
-			font-weight: bold;
-			line-height: 30px;
-		}
-		#singer{
-			font-size: 16px;
-			line-height: 24px;
-		}
-		.time{
-			position: relative;
-			display: inline-block;
-			font-size: 10px;
-			color: #AEAEAE;
-			height: 15px;
-		    margin-bottom: 10px;
-			width: 100%;
-		}
-		.time .text{			
-			position: absolute;
-			display: inline-block;
-			height: 15px;
-		}
-		#currentTime{
-			left: 0%;
-		}
-		#totalTime{
-			right: 0%;
-		}
-		.control{
-			position: relative;
-		    display: inline-flex;
-		    height: 80px;
-		    text-align: center;
-		    line-height: 80px;
-		    width: 100%;
-		    flex-direction: row;
-		    justify-content: space-between;
-		    align-items: center;
-		    margin-bottom: 10px;
-		}
-		.control .btn{
-			position: relative;
-			display: inline-block;
-			width: 45px;
-			height: 45px;
-			border-radius: 45px;
-			vertical-align: middle;
-			background-repeat: no-repeat;
-			background-size: contain;
-			background-position: center;
-			transition: background-image .3s;
-		}
-		#btn_shufflePlayback{
-			background-image: url(img/btn_shufflePlayback.svg);
-		}
-		#btn_rewind{
-			background-image: url(img/btn_rewind.svg);
-		}
-		#btn_play{
-			background-image: url(img/btn_play.svg);
-			width: 70px;
-			height: 70px;
-			border-radius: 70px;
-		}
-		#btn_play.playing{			
-			background-image: url(img/btn_pause.svg);
-		}
-		#btn_fast{
-			background-image: url(img/btn_fast.svg);
-		}
-		#btn_repeat{
-			background-image: url(img/btn_repeatAll.svg);
-		}
 	</style>
 </head>
 <body>
 	<div class="app noSelect" id="app" v-cloak>
 		<div class="appContent">
 			<div class="page">
-				<!--<div class="titlePage">
-					
-				</div>-->
+				<div class="album" @click="album_click"></div>
 				<div  class="content">
 					<div class="title">
 						<div class="text" id="song">{{currentlySong}}</div>
 						<div class="text" id="singer">{{currentlySinger}}</div>
 					</div>
 					<div class="progressRate">
-						<drag-bar-component class="range" :rate-x.sync="timeRate" @dragstart="dragstart" @dragend="dragend" @dragmove="dragmove">
+						<drag-bar-component class="range" :rate-x.sync="timeRate" @dragstart="dragstart" @dragend="dragend" @dragmove="dragmove" @beforedragmove="beforedragmove">
 							<div class="btn"></div>
 						</drag-bar-component>
 					</div>
@@ -240,12 +35,32 @@
 						<div class="text" id="totalTime">{{formatTime(totalTime)}}</div>
 					</div>
 					<div class="control">
-						<div class="btn" id="btn_shufflePlayback" @click="btn_shufflePlayback_click"></div>
+						<div class="btn" id="btn_shufflePlayback" @click="btn_shufflePlayback_click" :class="{active:shufflePlayback}"></div>
 						<div class="btn" id="btn_rewind" @click="btn_rewind_click"></div>
 						<div class="btn" id="btn_play" @click="btn_play_click" :class="{playing:playing}"></div>
 						<div class="btn" id="btn_fast" @click="btn_fast_click"></div>
-						<div class="btn" id="btn_repeat" @click="btn_repeat_click"></div>
+						<div class="btn" id="btn_repeat" @click="btn_repeat_click" :class="[repeatType]"></div>
 					</div>
+				</div>
+			</div>
+			<div class="page" id="playList" v-if="playListBool">
+				<div class="album"></div>
+				<div  class="content">
+					<div class="list">
+						<div class="item" v-for="(item,index) in currentlyAlbum" :class="{active:index===songIndex}" @click="goplay(index)">
+							<div class="itemContent">
+								<div class="song">{{item.song}}</div>
+								<div class="singer">{{item.singer}}</div>
+							</div>
+							<div class="right">
+								<div class="btn" :class="{playing:index===songIndex&&playing}"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="titleTop">
+					<div class="text">PLAYLIST</div>
+					<div class="btn" @click="back_click"></div>
 				</div>
 			</div>
         </div>

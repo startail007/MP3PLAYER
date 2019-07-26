@@ -1,32 +1,4 @@
 window.onload = function() {
-	var dragPlugin = {};
-	dragPlugin.install = function (Vue, options) {
-	  	// 1. add global method or property
-		Vue.myGlobalMethod = function () {
-	    	// some logic ...
-	  	}
-
-	  	// 2. add a global asset
-	  	Vue.directive('drag', {
-	    	bind:function(el, binding, vnode, oldVnode) {
-	      		// some logic ...
-	    	}
-	  	})
-
-	  	// 3. inject some component options
-	  	Vue.mixin({
-	    	created: function () {
-	    	}
-	  	})
-
-	  	// 4. add an instance method
-	  	Vue.prototype.$myMethod = function (methodOptions) {
-	    	// some logic ...
-	    	console.log(methodOptions);
-	  	}
-	}
-	//Vue.use(dragPlugin);
-
 	var dragComponent = {
 		props: {
 			x: {type:Number,default: 0},
@@ -35,7 +7,7 @@ window.onload = function() {
 			lockY: {type:Boolean,default: false}
 		},
 		template:
-			`<div class="dragComponent" @mousedown="mousedown" :style="dragComponentStyle">
+			`<div class="dragComponent" @mousedown="mousedown" :style="dragComponentStyle" @touchstart="touchstart" @touchend="touchend" @touchmove="touchmove">
 				<slot></slot>
 			</div>`,
 		data: function () {
@@ -57,9 +29,6 @@ window.onload = function() {
 	  	mounted: function() {
 	  		this.targetPosX = this.$el.offsetLeft + this.$el.clientLeft;
 	        this.targetPosY = this.$el.offsetTop + this.$el.clientTop;
-	        /*this.$nextTick(function(){	        	
-	        	console.log(this.limitFun());
-	        });*/
         },
         watch:{
         	x:function(val){
@@ -76,59 +45,113 @@ window.onload = function() {
         	}        	
         },
 	  	methods: {
+	  		touchesPoint:function(pTouches) {
+                var p = new Array();
+                var c = {
+                    x: 0,
+                    y: 0
+                };
+                var d = 0
+                if (pTouches) {
+                    var len = pTouches.length;
+                    for (var i = 0; i < len; i++) {
+                        c.x += pTouches[i].pageX;
+                        c.y += pTouches[i].pageY;
+                        p.push({
+                            x: pTouches[i].pageX,
+                            y: pTouches[i].pageY
+                        });
+                    }
+                    c.x /= len;
+                    c.y /= len;
+                    if (len == 2) {
+                        var xx = p[1].x - p[0].x;
+                        var yy = p[1].y - p[0].y;
+                        d = Math.sqrt(xx * xx + yy * yy);
+                    }
+                }
+                return {
+                    pos: c,
+                    dis: d
+                };
+            },
+            touchstart:function(e) {
+            	if(e.touches.length>1){
+            		return;
+            	}
+            	var touches = this.touchesPoint(e.touches);
+            	this.dragstart(e,touches.pos.x,touches.pos.y);
+            },
+            touchend:function(e) {            	
+	            this.dragend(e);
+            },
+            touchmove:function(e) {    
+            	if(e.touches.length>1){
+            		return;
+            	}   	
+            	var touches = this.touchesPoint(e.touches);
+            	this.dragmove(e,touches.pos.x,touches.pos.y);
+            },            
 	    	mousedown:function(e){
-        		var target = e.target || e.srcElement;
-
 	            if (e.button && e.button !== 0) {
 	                return;
 	            }
-	            this.originalPosX = this.$el.offsetLeft + this.$el.clientLeft;
-	            this.originalPosY = this.$el.offsetTop + this.$el.clientTop;
-	            //console.log(this.$el.clientLeft)
 	            e.stopPropagation();
         		e.preventDefault();
-        		this.pageX = e.pageX;
-        		this.pageY = e.pageY;
-        		this.dragStartBool = true;
-        		this.draggingBool = false;
+        		this.dragstart(e,e.pageX,e.pageY);
         		document.documentElement.addEventListener('mousemove', this.mousemove);
 	        	document.documentElement.addEventListener('mouseup', this.mouseup);
-	            this.$emit('dragstart',e);
         	},	        
         	mouseup:function(e){
-        		if (!this.dragStartBool) {
+	            this.dragend(e);
+        		document.documentElement.removeEventListener('mousemove', this.mousemove);
+	        	document.documentElement.removeEventListener('mouseup', this.mouseup);	        	
+        	},        	
+        	mousemove:function(e){
+	            e.stopPropagation();
+        		this.dragmove(e,e.pageX,e.pageY);	            
+        	},
+        	dragstart:function(e, px, py){
+	            this.originalPosX = this.$el.offsetLeft + this.$el.clientLeft;
+	            this.originalPosY = this.$el.offsetTop + this.$el.clientTop;
+            	this.pageX = px;
+        		this.pageY = py;
+        		this.dragStartBool = true;
+        		this.draggingBool = false;
+	            this.$emit('dragstart',e);
+            },
+            dragend:function(e){
+            	if (!this.dragStartBool) {
         			return;
 	            }
-	            this.dragStartBool = false;
+            	this.dragStartBool = false;
         		this.draggingBool = false;
-        		document.documentElement.removeEventListener('mousemove', this.mousemove);
-	        	document.documentElement.removeEventListener('mouseup', this.mouseup);
         		this.dragX = 0;
         		this.dragY = 0;        		
 	            this.originalPosX  = this.targetPosX + this.dragX;
 	            this.originalPosY  = this.targetPosY + this.dragY;
 	            this.$emit('dragend',e);
-        	},        	
-        	mousemove:function(e){
-        		if (!this.dragStartBool) {
+            },
+            dragmove:function(e, px, py){
+            	if (!this.dragStartBool) {
         			return;
 	            }
-	            this.dragX = e.pageX - this.pageX;			            
-	            this.dragY = e.pageY - this.pageY;			            
+            	this.dragX = px - this.pageX;			            
+	            this.dragY = py - this.pageY;			            
 	            if(!this.draggingBool){
 	            	if(this.dragX===0&&this.dragY===0){
 		            	return;
 		            }
+		            this.$emit('beforedragmove',e);
 	            }
 	            this.draggingBool = true;
-	            e.stopPropagation();
 	            this.targetPosX  = this.originalPosX + this.dragX;
 	            this.targetPosY  = this.originalPosY + this.dragY;
 	            this.$emit('dragmove',e,{x:this.targetPosX,y:this.targetPosY},{x:this.dragX,y:this.dragY},function(x, y){
 	            	this.targetPosX = x;
 	            	this.targetPosY = y;
 	            }.bind(this));
-        	}
+            }
 	  	},
 	  	computed:{
 			dragComponentStyle:function(){
@@ -153,7 +176,7 @@ window.onload = function() {
 	  	},
 		template:
 			`<div class="dragBarComponent">
-				<drag-component class="progress" @dragstart="dragstart" @dragend="dragend" @dragmove="dragmove" :lock-x="true" :lock-y="true">
+				<drag-component class="progress" ref="progress" @dragstart="dragstart" @dragend="dragend" @dragmove="dragmove"  @beforedragmove="beforedragmove" :lock-x="true" :lock-y="true">
 					<div class="bg"></div>
 					<div class="rate" :style="{width:targetRateX*100+'%'}"></div>
 					<div class="drag_btn" ref="drag" :style="{left:targetRateX*100+'%'}">
@@ -203,6 +226,22 @@ window.onload = function() {
         	}  	
         },
 		methods: {
+			getRect:function(el){
+				var parent = el.offsetParent;
+				var parentLeft = 0;
+				var parentTop = 0;
+				while (parent) {
+					parentLeft += parent.offsetLeft + parent.clientLeft;
+					parentTop += parent.offsetTop + parent.clientTop;
+					parent = parent.offsetParent;
+				}
+				return {
+		    		left:parentLeft + el.offsetLeft + el.clientLeft,
+		    		top:parentTop + el.offsetTop + el.clientTop,
+		    		right:parentLeft + el.offsetLeft + el.offsetWidth + el.clientLeft,
+		    		bottom:parentTop + el.offsetTop + el.offsetHeight + el.clientTop,
+		    	}
+			},
 			dragstart:function(e){
 				var bool = false;
 				var c = e.target;
@@ -216,14 +255,23 @@ window.onload = function() {
 				if(bool){
 					this.originalPosX = this.$refs.drag.offsetLeft + this.$refs.drag.clientLeft;
 					this.originalPosY = this.$refs.drag.offsetTop + this.$refs.drag.clientTop;
-				}else{					
-					this.originalPosX = e.offsetX;
-					this.originalPosY = e.offsetY;
+				}else{
+					var rect = this.getRect(this.$refs.progress.$el);					
+					if(e.targetTouches){
+						this.originalPosX = e.targetTouches[0].pageX - rect.left;
+						this.originalPosY = e.targetTouches[0].pageY - rect.top;
+					}else{
+						this.originalPosX = e.pageX - rect.left;
+						this.originalPosY = e.pageY - rect.top;
+					}		
 				}
-				this.$emit('dragstart',e);
+				this.$emit('dragstart',e,bool?"button":"timebar");
 			},
 			dragend:function(e){
 				this.$emit('dragend',e);
+			},
+			beforedragmove:function(e){	
+				this.$emit('beforedragmove',e);
 			},
 			dragmove:function(e, pos, drag){
 				var ww = this.$el.offsetWidth-this.$refs.drag.offsetWidth;
@@ -247,7 +295,7 @@ window.onload = function() {
 	    	'drag-bar-component': dragBarComponent
 	  	},
         data: {
-        	album:[
+        	albums:[
         		[
         			{song:"Species",singer:"Diamond Ortiz",src:"song/album01/Species.mp3"},
         			{song:"Irie",singer:"Quincas Moreira",src:"song/album01/Irie.mp3"},
@@ -267,41 +315,65 @@ window.onload = function() {
         	currentlyTime:40*2,
         	totalTime:60*5,
         	timeRate:0,
-        	audio:null	
+        	audio:null,
+        	repeatIndex:0,
+        	repeatTypes:["","all","one"],
+        	shufflePlayback:false,
+        	playList:[],
+        	playListBool:false
         },
         mounted: function() {
-	        /*this.startAnimation();
-        	this.init();*/
-        	/*var timeRate = 0;
-        	if(this.totalTime>0){
-	        	timeRate = this.currentlyTime/this.totalTime;
-	        }
-        	this.timeRate = timeRate;*/
-        	/*this.$nextTick(function(){
-        		var a = this.$refs.audio;
-        		console.log([a]);
-        		a.play();
-        	});*/
         	this.audio = new Audio(this.currentlySrc);
         	this.audio.addEventListener("canplay", this.canplay);
         	this.audio.addEventListener("timeupdate", this.timeupdate);
         	this.audio.addEventListener("ended", this.ended);
-
-        	//console.log(this.audio.)   	
+        	this.playList = this.getNumberList(this.albums[this.albumIndex].length,this.shufflePlayback);
+        	this.songIndex = this.playList[0];
         },
         watch:{
         	timeRate:function(val){
         		this.currentlyTime = val*this.totalTime;
         	},
-        	currentlyTime:function(){
+        	currentlyTime:function(val){
         		var timeRate = 0;
 	        	if(this.totalTime>0){
-		        	timeRate = this.currentlyTime/this.totalTime;
+		        	timeRate = val/this.totalTime;
 		        }
 	        	this.timeRate = timeRate;
+        	},
+        	shufflePlayback:function(val){
+        		this.playList = this.getNumberList(this.albums[this.albumIndex].length,this.shufflePlayback);
         	}
         },
         methods: {
+        	getNumberList:function(len,randomBool){
+        		var random = [];
+        		var count = 0;
+	        	for(var i=0;i<len;i++){
+	        		if(randomBool){
+	        			var num = Math.floor(Math.random()*(len-count));
+		        		var n = 0;
+		        		if(random.length>0){
+			        		n = random.map(function(el){
+			        			return el<=num?1:0;
+			        		}).reduce(function(accumulator, currentValue){
+			        			return accumulator+currentValue;
+			        		});
+		        		} 
+		        		num = num+n;
+		        		while(random.indexOf(num)!==-1){
+		        			num++;
+		        			num%=len;
+		        		} 
+	        			random[i] = num;
+	        		}else{       		
+	        			random[i] = i;
+	        		}
+	        		count++;	
+	        	}
+	        	console.log(random);
+	        	return random;
+        	},
 	        btn_play_click:function(){
 	        	this.playing = !this.playing;
 	        	if(this.playing){	        		
@@ -311,18 +383,28 @@ window.onload = function() {
 	        	}
 	        },
 	        btn_rewind_click:function(){
-	        	var temp = this.songIndex - 1;
-	        	this.songIndex = (temp + this.album[this.albumIndex].length)%this.album[this.albumIndex].length;
-	        	this.audio.src = this.currentlySrc;
-	        	this.audio.load();
-        		this.currentlyTime = 0;
-        		if(this.playing){
-        			this.audio.play();
-        		}
+	        	var playListIndex = this.playList.indexOf(this.songIndex);	        	
+	        	var temp = playListIndex - 1;
+	        	if(temp<0){	        		
+        			this.playList = this.getNumberList(this.playList.length,this.shufflePlayback);
+	        	}
+	        	temp = (temp + this.playList.length)%this.playList.length;
+
+	        	this.songIndex = this.playList[temp];	        	
+	        	this.setSong();
 	        },
-	        btn_fast_click:function(){	        	
-	        	var temp = this.songIndex + 1;
-	        	this.songIndex = temp%this.album[this.albumIndex].length;
+	        btn_fast_click:function(){  
+	        	var playListIndex = this.playList.indexOf(this.songIndex);
+	        	var temp = playListIndex + 1;	        	
+	        	if(temp>=this.playList.length){	        		
+        			this.playList = this.getNumberList(this.playList.length,this.shufflePlayback);
+	        	}
+	        	temp = temp%this.playList.length;
+
+	        	this.songIndex = this.playList[temp];
+	        	this.setSong();
+	        },
+	        setSong:function(){
 	        	this.audio.src = this.currentlySrc;
 	        	this.audio.load();
         		this.currentlyTime = 0;
@@ -331,10 +413,11 @@ window.onload = function() {
         		}
 	        },
 	        btn_shufflePlayback_click:function(){
-
+	        	this.shufflePlayback = !this.shufflePlayback;
 	        },
 	        btn_repeat_click:function(){
-
+	        	var temp = this.repeatIndex + 1;
+	        	this.repeatIndex = temp % this.repeatTypes.length;
 	        },
 	        formatTime:function(time){
         		var temp = Math.ceil(time);
@@ -345,24 +428,28 @@ window.onload = function() {
         		return m+":"+s;
         	},
         	canplay:function(e){
-        		//console.log(e);
         		this.currentlyTime = this.audio.currentTime;
         		this.totalTime = this.audio.duration;
         	},
         	timeupdate:function(e){
-        		//console.log(e);
         		this.currentlyTime = this.audio.currentTime;
         	},
         	ended:function(e){
-        		//console.log(e);
-        		this.audio.play();
-        		//this.playing = false;
+        		var type = this.repeatType;
+        		if(type===""){
+        		}else if(type==="all"){        			
+        			this.btn_fast_click();
+        		}else if(type==="one"){        			
+        			this.audio.play();
+        		}
         	},
-        	dragstart:function(){
+        	dragstart:function(e,type){
         		this.temp_playing = this.playing;
-        		this.audio.pause();
+        		if(type==="button"){        			
+        			this.audio.pause();
+        		}
 			},
-			dragend:function(){
+			dragend:function(e){
 	    		this.audio.currentTime = this.currentlyTime;				
         		this.playing = this.temp_playing;
         		if(this.playing){	        		
@@ -371,18 +458,45 @@ window.onload = function() {
 	        		this.audio.pause();
 	        	}
 			},
+			beforedragmove:function(e){
+	    		if(!this.audio.paused){
+        			this.audio.pause();
+	    		}
+	        },
 	    	dragmove:function(e){
-	        }   
+
+	        },
+	        album_click:function(){
+	        	this.playListBool = true;
+	        },
+	        goplay:function(index){
+	        	if(index!==this.songIndex){
+	        		this.songIndex = index;
+	        		this.playing = true;
+	        		this.setSong();
+	        	}else{
+	        		this.btn_play_click();
+	        	}
+	        },
+	        back_click:function(){	        	
+	        	this.playListBool = false;
+	        }
 		},
 	    computed:{
 	    	currentlySong:function(){
-	    		return this.album[this.albumIndex][this.songIndex].song;
+	    		return this.albums[this.albumIndex][this.songIndex].song;
 	    	},
 	    	currentlySinger:function(){
-	    		return this.album[this.albumIndex][this.songIndex].singer;
+	    		return this.albums[this.albumIndex][this.songIndex].singer;
 	    	},
 	    	currentlySrc:function(){
-	    		return this.album[this.albumIndex][this.songIndex].src;
+	    		return this.albums[this.albumIndex][this.songIndex].src;
+	    	},
+	    	currentlyAlbum:function(){
+	    		return this.albums[this.albumIndex];
+	    	},
+	    	repeatType:function(){
+	    		return this.repeatTypes[this.repeatIndex];
 	    	}
 		}
     });
