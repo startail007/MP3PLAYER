@@ -338,7 +338,7 @@ window.onload = function() {
         	this.audio.addEventListener("ended", this.ended);
         	this.playList = this.getNumberList(this.albums[this.albumIndex].length,this.shufflePlayback);
         	this.songIndex = this.playList[0];	
-        	this.wave = new Array(32);
+        	this.wave = new Array(16);
 			for(var i=0;i<this.wave.length;i++){
 				this.wave[i] = 255*0.5;
 			}
@@ -382,8 +382,8 @@ window.onload = function() {
 				//console.log(a);
 				if(this.playing){
 					this.analyser.getByteTimeDomainData(this.dataArray);
-			      	for(var i = 0; i < this.bufferLength/64; i++) {
-			      		this.wave[i] = this.dataArray[64*i];
+			      	for(var i = 0; i < this.wave.length; i++) {
+			      		this.wave[i] = this.dataArray[i*this.bufferLength/this.wave.length];
 			      	}	
 			    }	
 			    
