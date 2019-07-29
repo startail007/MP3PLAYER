@@ -9,18 +9,20 @@
 </style>
 <g>
 	<g>
-		<defs>
-			<rect id="SVGID_1_" y="0" width="44" height="44"/>
-		</defs>
-		<clipPath id="SVGID_2_">
-			<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
-		</clipPath>
-		<g class="st0">
-			<rect y="0" class="st1" width="44" height="44"/>
-			<g transform="translate(-224.739 -609.739)">
-				<path class="st2" d="M251.9,641.8c-0.4,0-0.7-0.1-1-0.4l-10.7-8.5c-0.6-0.5-0.7-1.4-0.2-2c0.1-0.1,0.1-0.2,0.2-0.2l10.9-8.7
-					c0.7-0.5,1.6-0.5,2.3,0.1c0.6,0.6,0.6,1.7,0,2.3l-0.1,0.1l-8.5,6.8c-0.3,0.3-0.4,0.7-0.1,1l0.1,0.1l8.2,6.5
-					c0.7,0.6,0.8,1.6,0.3,2.3C252.9,641.6,252.4,641.8,251.9,641.8L251.9,641.8z"/>
+		<g>
+			<defs>
+				<rect id="SVGID_1_" y="0" width="44" height="44"/>
+			</defs>
+			<clipPath id="SVGID_2_">
+				<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+			</clipPath>
+			<g class="st0">
+				<rect y="0" class="st1" width="44" height="44"/>
+				<g transform="translate(-224.739 -609.739)">
+					<path class="st2" d="M251.9,641.8c-0.4,0-0.7-0.1-1-0.4l-10.7-8.5c-0.6-0.5-0.7-1.4-0.2-2c0.1-0.1,0.1-0.2,0.2-0.2l10.9-8.7
+						c0.7-0.5,1.6-0.5,2.3,0.1c0.6,0.6,0.6,1.7,0,2.3l-0.1,0.1l-8.5,6.8c-0.3,0.3-0.4,0.7-0.1,1l0.1,0.1l8.2,6.5
+						c0.7,0.6,0.8,1.6,0.3,2.3C252.9,641.6,252.4,641.8,251.9,641.8L251.9,641.8z"/>
+				</g>
 			</g>
 		</g>
 	</g>

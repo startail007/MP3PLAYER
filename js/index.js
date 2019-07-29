@@ -297,15 +297,15 @@ window.onload = function() {
         data: {
         	albums:[
         		[
-        			{song:"Species",singer:"Diamond Ortiz",src:"song/album01/Species.mp3"},
-        			{song:"Irie",singer:"Quincas Moreira",src:"song/album01/Irie.mp3"},
-        			{song:"Bed and Breakfast02",singer:"The 126ers",src:"song/album01/Bed_and_Breakfast.mp3"},
-        			{song:"Central Park",singer:"Quincas Moreira",src:"song/album01/Central_Park.mp3"},
-        			{song:"There's Life Out There",singer:"Cooper Cannell",src:"song/album01/There_s_Life_Out_There.mp3"},
-        			{song:"Ticker",singer:"Silent Partner",src:"song/album01/Ticker.mp3"},
-        			{song:"Urban Lullaby",singer:"Jimmy Fontanez/Doug Maxwell",src:"song/album01/Urban_Lullaby.mp3"},
-        			{song:"Mamas",singer:"Josh Lippi & The Overtimers",src:"song/album01/Mamas.mp3"},
-        			{song:"Corporate Mellow Groove",singer:"Doug Maxwell",src:"song/album01/Corporate_Mellow_Groove.mp3"}
+        			{song:"Species",singer:"Diamond Ortiz",src:"song/album01/Species.mp3",bg:"img/8C9Evy.png"},
+        			{song:"Irie",singer:"Quincas Moreira",src:"song/album01/Irie.mp3",bg:"img/mZdA12.png"},
+        			{song:"Bed and Breakfast02",singer:"The 126ers",src:"song/album01/Bed_and_Breakfast.mp3",bg:"img/8C9Evy.png"},
+        			{song:"Central Park",singer:"Quincas Moreira",src:"song/album01/Central_Park.mp3",bg:"img/mZdA12.png"},
+        			{song:"There's Life Out There",singer:"Cooper Cannell",src:"song/album01/There_s_Life_Out_There.mp3",bg:"img/8C9Evy.png"},
+        			{song:"Ticker",singer:"Silent Partner",src:"song/album01/Ticker.mp3",bg:"img/mZdA12.png"},
+        			{song:"Urban Lullaby",singer:"Jimmy Fontanez/Doug Maxwell",src:"song/album01/Urban_Lullaby.mp3",bg:"img/8C9Evy.png"},
+        			{song:"Mamas",singer:"Josh Lippi & The Overtimers",src:"song/album01/Mamas.mp3",bg:"img/mZdA12.png"},
+        			{song:"Corporate Mellow Groove",singer:"Doug Maxwell",src:"song/album01/Corporate_Mellow_Groove.mp3",bg:"img/8C9Evy.png"}
         		]
         	],
         	albumIndex:0,
@@ -320,7 +320,12 @@ window.onload = function() {
         	repeatTypes:["","all","one"],
         	shufflePlayback:false,
         	playList:[],
-        	playListBool:false
+        	playListBool:false,
+        	advertiseBool:false,
+        	nextPlay:{
+        		albumIndex:0,
+        		songIndex:0
+        	}
         },
         mounted: function() {
         	this.audio = new Audio(this.currentlySrc);
@@ -371,7 +376,6 @@ window.onload = function() {
 	        		}
 	        		count++;	
 	        	}
-	        	console.log(random);
 	        	return random;
         	},
 	        btn_play_click:function(){
@@ -390,8 +394,7 @@ window.onload = function() {
 	        	}
 	        	temp = (temp + this.playList.length)%this.playList.length;
 
-	        	this.songIndex = this.playList[temp];	        	
-	        	this.setSong();
+	        	this.advertiseShow(0,this.playList[temp]);
 	        },
 	        btn_fast_click:function(){  
 	        	var playListIndex = this.playList.indexOf(this.songIndex);
@@ -401,8 +404,7 @@ window.onload = function() {
 	        	}
 	        	temp = temp%this.playList.length;
 
-	        	this.songIndex = this.playList[temp];
-	        	this.setSong();
+	        	this.advertiseShow(0,this.playList[temp]);
 	        },
 	        setSong:function(){
 	        	this.audio.src = this.currentlySrc;
@@ -466,20 +468,47 @@ window.onload = function() {
 	    	dragmove:function(e){
 
 	        },
-	        album_click:function(){
-	        	this.playListBool = true;
-	        },
 	        goplay:function(index){
 	        	if(index!==this.songIndex){
-	        		this.songIndex = index;
-	        		this.playing = true;
-	        		this.setSong();
+	        		this.advertiseShow(0,this.playList[temp]);
 	        	}else{
 	        		this.btn_play_click();
 	        	}
 	        },
 	        back_click:function(){	        	
 	        	this.playListBool = false;
+	        },
+	        list_click:function(){	        		
+	        	this.playListBool = true;
+	        },
+	        follow_click:function(){
+	        	this.advertiseHide();
+	        },
+	        no_click:function(){
+	        	this.advertiseHide();
+	        },
+	        advertiseShow:function(albumIndex,songIndex){
+	        	if(Math.random()>0.5){
+	        		this.nextPlay.albumIndex = albumIndex;
+	        		this.nextPlay.songIndex = songIndex;
+        			this.advertiseBool = true;
+	        		this.temp_playing = this.playing;
+    				this.playing = false;
+    				this.audio.pause();
+    			}else{
+    				this.albumIndex = albumIndex;
+		        	this.songIndex = songIndex;
+		        	this.setSong();
+    			}
+	        },
+	        advertiseHide:function(){	
+	        	if(this.advertiseBool){
+		        	this.advertiseBool = false;
+		        	this.playing = this.temp_playing;
+		        	this.albumIndex = this.nextPlay.albumIndex;
+		        	this.songIndex = this.nextPlay.songIndex;
+		        	this.setSong();
+	        	}
 	        }
 		},
 	    computed:{
@@ -491,6 +520,9 @@ window.onload = function() {
 	    	},
 	    	currentlySrc:function(){
 	    		return this.albums[this.albumIndex][this.songIndex].src;
+	    	},
+	    	currentlyBg:function(){
+	    		return this.albums[this.albumIndex][this.songIndex].bg;
 	    	},
 	    	currentlyAlbum:function(){
 	    		return this.albums[this.albumIndex];

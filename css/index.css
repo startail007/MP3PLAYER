@@ -45,6 +45,7 @@ body{
 	box-sizing: border-box;
 	margin: 5px 0px;
 	width: 100%;
+	cursor: pointer;
 }
 .progressRate .range{
 	position: relative;
@@ -143,19 +144,36 @@ body{
 	display: block;
 	width: 100%;
 	height: 100%;
-	background-image: url(../img/8C9Evy.png);
+	/*background-image: url(../img/8C9Evy.png);*/
 	background-position: center top;
 	background-size: 100% auto;
 	background-repeat: no-repeat;
+	transition: background-image .3s;
 }		
 .title{
 	position: relative;
 	display: inline-block;
-    text-align: center;
+    text-align: left;
     padding: 0px 0px;
     margin-bottom: 20px;
 	width: 100%;
+}
+.title .btn{
+	position: absolute;
+	display: block;
+	width: 30px;
+	height: 30px;	
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;		
+	top: 50%;
+	right: 0px;
+	margin-top: -15px;
+	cursor: pointer;
 }		
+.title #btn_list{
+	background-image: url(../img/btn_list.svg);	
+}
 .title .text{			
     color: #413D3D;
 }
@@ -211,6 +229,7 @@ body{
 	background-size: contain;
 	background-position: center;
 	transition: background-image .3s;
+	cursor: pointer;
 }
 .control #btn_shufflePlayback{
 	background-image: url(../img/btn_shufflePlayback.svg);
@@ -327,6 +346,7 @@ body{
 	transition: background-image .3s;
 	background-image: url(../img/btn_small_play.svg);
 	border-radius: 70px;
+	cursor: pointer;
 }
 .item .btn.playing{			
 	background-image: url(../img/btn_small_pause.svg);
@@ -353,7 +373,139 @@ body{
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-position: center;		
-	background-image: url(../img/btn_back.svg);
 	top: 0px;
 	left: 5px;
+	cursor: pointer;
+}
+.titleTop #btn_back{
+	background-image: url(../img/btn_back.svg);	
+}
+
+.box{
+	position: absolute;
+	display: block;
+    width: 100%;
+    height: calc(100vh - 100%);
+    min-height: calc(600px - 213px);
+    max-height: calc(800px - 100%);
+    bottom: 100%;
+    left: 0px;
+    padding: 80px 25px 80px;
+    box-sizing: border-box;
+}
+.boxframe{	
+	position: relative;
+	display: block;
+    width: 100%;
+    height: 100%;
+    border: 10px solid #fff;
+    filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25));
+    box-sizing: border-box;
+}
+.advertise{
+	position: absolute;
+	display: table;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	left: 0px;
+	top: 0px;
+}
+.advertiseContent{
+	position: relative;
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+.advertiseMain{
+	position: relative;
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+	max-width: 350px;
+	max-height: 500px;
+	padding-bottom: 40px;
+	box-sizing: border-box;
+}
+.advertiseMainBox{
+	position: relative;
+	display: block;
+	width: 100%;
+	height: 100%;
+	border-radius: 0px 0px 30px 30px;
+	background-position: center top;
+	background-size: 100% auto;
+	background-repeat: no-repeat;
+}
+.advertiseContent .text{	
+    position: absolute;
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    bottom: 0px;
+    width: 100%;
+    color: #fff;
+    text-decoration: underline;
+	cursor: pointer;
+}
+.advertiseMainBoxContent{
+	position: absolute;
+	display: block;
+	width: 100%;
+	bottom: 0px;
+	background-color: #fff;
+	border-radius: 0px 0px 30px 30px;
+	padding: 25px 5px;
+	box-sizing: border-box;
+}
+.advertiseMainBoxContent .song{
+	position: relative;
+	display: block;
+	color: #413D3D;
+	font-weight: bold;
+	font-size: 22px;
+	line-height: 28px;
+}
+.advertiseMainBoxContent .singer{	
+	position: relative;
+	display: block;
+	color: #413D3D;
+	font-size: 16px;
+	line-height: 20px;
+	margin-bottom: 20px;
+}
+.advertiseMainBoxContent .btn{
+	position: relative;
+	display: inline-block;
+	background-color: #413D3D;
+	color: #fff;
+	font-weight: bold;
+	font-size: 16px;
+	border-radius: 25px;
+	width: 100%;
+	max-width: 160px;
+	padding: 20px;
+	box-sizing: border-box;
+	cursor: pointer;
+}
+
+/*過度*/
+.playList-enter-active {
+    transition: opacity .5s,transform .5s;
+}
+.playList-leave-active {
+    transition: opacity .5s,transform .5s;
+}
+.playList-enter, .playList-leave-to {
+    opacity: 0;
+    transform: translateX(-100%);
+}
+.advertise-enter-active {
+    transition: opacity .5s;
+}
+.advertise-leave-active {
+    transition: opacity .5s;
+}
+.advertise-enter, .advertise-leave-to {
+    opacity: 0;
 }

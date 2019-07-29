@@ -19,11 +19,15 @@
 	<div class="app noSelect" id="app" v-cloak>
 		<div class="appContent">
 			<div class="page">
-				<div class="album" @click="album_click"></div>
+				<div class="album" :style="{backgroundImage: 'url('+currentlyBg+')'}"></div>
 				<div  class="content">
+					<div class="box">
+						<div class="boxframe"></div>
+					</div>
 					<div class="title">
 						<div class="text" id="song">{{currentlySong}}</div>
 						<div class="text" id="singer">{{currentlySinger}}</div>
+						<div class="btn" id="btn_list" @click="list_click"></div>
 					</div>
 					<div class="progressRate">
 						<drag-bar-component class="range" :rate-x.sync="timeRate" @dragstart="dragstart" @dragend="dragend" @dragmove="dragmove" @beforedragmove="beforedragmove">
@@ -41,28 +45,48 @@
 						<div class="btn" id="btn_fast" @click="btn_fast_click"></div>
 						<div class="btn" id="btn_repeat" @click="btn_repeat_click" :class="[repeatType]"></div>
 					</div>
-				</div>
+				</div>	
 			</div>
-			<div class="page" id="playList" v-if="playListBool">
-				<div class="album"></div>
-				<div  class="content">
-					<div class="list">
-						<div class="item" v-for="(item,index) in currentlyAlbum" :class="{active:index===songIndex}" @click="goplay(index)">
-							<div class="itemContent">
-								<div class="song">{{item.song}}</div>
-								<div class="singer">{{item.singer}}</div>
+			<transition name="playList">
+				<div class="page" id="playList" v-if="playListBool">
+					<div class="album" :style="{backgroundImage: 'url('+currentlyBg+')'}"></div>
+					<div  class="content">
+						<div class="list">
+							<div class="item" v-for="(item,index) in currentlyAlbum" :class="{active:index===songIndex}" @click="goplay(index)">
+								<div class="itemContent">
+									<div class="song">{{item.song}}</div>
+									<div class="singer">{{item.singer}}</div>
+								</div>
+								<div class="right">
+									<div class="btn" :class="{playing:index===songIndex&&playing}"></div>
+								</div>
 							</div>
-							<div class="right">
-								<div class="btn" :class="{playing:index===songIndex&&playing}"></div>
+						</div>
+					</div>
+					<div class="titleTop">
+						<div class="text">PLAYLIST</div>
+						<div class="btn" id="btn_back" @click="back_click"></div>
+					</div>
+				</div>
+			</transition>
+			<transition name="advertise">
+				<div class="advertise" v-if="advertiseBool">
+					<div class="advertiseContent">
+						<div class="advertiseMain">
+							<div class="advertiseMainBox" :style="{backgroundImage: 'url('+currentlyBg+')'}">
+								<div class="advertiseMainBoxContent">
+									<div class="song">{{currentlySong}}</div>
+									<div class="singer">{{currentlySinger}}</div>
+									<div class="btn" @click="follow_click">FOLLOW</div>
+								</div>
+							</div>
+							<div class="text" @click="no_click">
+								No, thanks.
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="titleTop">
-					<div class="text">PLAYLIST</div>
-					<div class="btn" @click="back_click"></div>
-				</div>
-			</div>
+			</transition>
         </div>
 	</div>
 </body>
