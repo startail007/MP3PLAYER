@@ -325,7 +325,11 @@ window.onload = function() {
         	nextPlay:{
         		albumIndex:0,
         		songIndex:0
-        	}
+        	},
+        	dataArray:null,
+        	canvasCtx:null,
+        	analyser:null,
+        	wave:[]
         },
         mounted: function() {
         	this.audio = new Audio(this.currentlySrc);
@@ -333,7 +337,15 @@ window.onload = function() {
         	this.audio.addEventListener("timeupdate", this.timeupdate);
         	this.audio.addEventListener("ended", this.ended);
         	this.playList = this.getNumberList(this.albums[this.albumIndex].length,this.shufflePlayback);
-        	this.songIndex = this.playList[0];
+        	this.songIndex = this.playList[0];	
+        	this.wave = new Array(32);
+			for(var i=0;i<this.wave.length;i++){
+				this.wave[i] = 255*0.5;
+			}
+			this.$refs.wave.width = this.$refs.wave.offsetWidth;
+			this.$refs.wave.height = this.$refs.wave.offsetHeight;
+			this.canvasCtx = this.$refs.wave.getContext('2d');
+        	this.updateAnimation();
         },
         watch:{
         	timeRate:function(val){
@@ -351,6 +363,69 @@ window.onload = function() {
         	}
         },
         methods: {
+        	createWave:function(){
+        		if(!this.analyser){
+					var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+					this.analyser = audioCtx.createAnalyser();
+					//analyser.fftSize = 2048;
+					this.bufferLength = this.analyser.fftSize;
+					this.dataArray = new Uint8Array(this.bufferLength);
+
+					var source1 = audioCtx.createMediaElementSource(this.audio);
+					source1.connect(this.analyser);
+					this.analyser.connect(audioCtx.destination);		        	
+        		}				
+        	},
+        	updateAnimation:function(){			    
+				requestAnimationFrame(this.updateAnimation);
+				
+				//console.log(a);
+				if(this.playing){
+					this.analyser.getByteTimeDomainData(this.dataArray);
+			      	for(var i = 0; i < this.bufferLength/64; i++) {
+			      		this.wave[i] = this.dataArray[64*i];
+			      	}	
+			    }	
+			    
+			    var WIDTH = this.$refs.wave.width;
+				var HEIGHT = this.$refs.wave.height;
+
+		      	this.canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+		      	/*this.canvasCtx.save();
+		      	this.canvasCtx.fillStyle = 'rgb(210, 210, 210)';
+		      	this.canvasCtx.beginPath();
+
+		      	var sliceWidth = WIDTH * 1.0 / (this.wave.length-2);
+
+		      	this.canvasCtx.moveTo(WIDTH, HEIGHT);
+		      	this.canvasCtx.lineTo(0, HEIGHT);
+		      	for(var i = 0; i < this.wave.length; i++) {
+		          	this.canvasCtx.lineTo(i*sliceWidth, HEIGHT*(1-this.wave[i] / 256));
+		      	}
+		      	this.canvasCtx.closePath();
+		      	this.canvasCtx.fill();	
+		      	this.canvasCtx.restore();*/	
+
+
+		      	this.canvasCtx.save();
+
+		      	var sliceWidth = WIDTH / this.wave.length;
+
+		      	this.canvasCtx.moveTo(WIDTH, HEIGHT);
+		      	this.canvasCtx.lineTo(0, HEIGHT);
+		      	for(var i = 0; i < this.wave.length; i++) {
+		      		var temp = this.wave[i]-255*0.5;
+		      		if(temp>0){
+		      			this.canvasCtx.fillStyle = 'rgb(200, 200, 200)';
+		      		}else{
+		      			this.canvasCtx.fillStyle = 'rgb(240, 240, 240)';
+		      		}
+		      		var rate = Math.abs(temp) / (255*0.5);
+		      		//console.log(rate)
+		      		this.canvasCtx.fillRect(i*sliceWidth,HEIGHT*(1-rate),sliceWidth,HEIGHT*rate);
+		      	}
+		      	this.canvasCtx.restore();	
+	        },
         	getNumberList:function(len,randomBool){
         		var random = [];
         		var count = 0;
@@ -379,12 +454,13 @@ window.onload = function() {
 	        	return random;
         	},
 	        btn_play_click:function(){
+	        	this.createWave();
 	        	this.playing = !this.playing;
 	        	if(this.playing){	        		
 	        		this.audio.play();
 	        	}else{
 	        		this.audio.pause();
-	        	}
+	        	}	        	
 	        },
 	        btn_rewind_click:function(){
 	        	var playListIndex = this.playList.indexOf(this.songIndex);	        	
@@ -434,7 +510,7 @@ window.onload = function() {
         		this.totalTime = this.audio.duration;
         	},
         	timeupdate:function(e){
-        		this.currentlyTime = this.audio.currentTime;
+        		this.currentlyTime = this.audio.currentTime;			    
         	},
         	ended:function(e){
         		var type = this.repeatType;
