@@ -338,7 +338,7 @@ window.onload = function() {
         	this.audio.addEventListener("ended", this.ended);
         	this.playList = this.getNumberList(this.albums[this.albumIndex].length,this.shufflePlayback);
         	this.songIndex = this.playList[0];	
-        	this.wave = new Array(16);
+        	this.wave = new Array(64);
 			for(var i=0;i<this.wave.length;i++){
 				this.wave[i] = 255*0.5;
 			}
@@ -407,7 +407,7 @@ window.onload = function() {
 		      	this.canvasCtx.restore();*/	
 
 
-		      	this.canvasCtx.save();
+		      	/*this.canvasCtx.save();
 
 		      	var sliceWidth = WIDTH / this.wave.length;
 
@@ -421,8 +421,25 @@ window.onload = function() {
 		      			this.canvasCtx.fillStyle = 'rgb(240, 240, 240)';
 		      		}
 		      		var rate = Math.abs(temp) / (255*0.5);
-		      		//console.log(rate)
 		      		this.canvasCtx.fillRect(i*sliceWidth,HEIGHT*(1-rate),sliceWidth,HEIGHT*rate);
+		      	}
+		      	this.canvasCtx.restore();*/
+
+		      	this.canvasCtx.save();
+
+		      	var sliceWidth = WIDTH / this.wave.length;
+
+		      	this.canvasCtx.moveTo(WIDTH, HEIGHT);
+		      	this.canvasCtx.lineTo(0, HEIGHT);
+		      	for(var i = 0; i < this.wave.length; i++) {
+		      		var temp = this.wave[i]-255*0.5;
+		      		var rate = EasingFunctions.easeInOutQuad(2*(0.5-Math.abs(i/(this.wave.length-1)-0.5)))*Math.abs(temp) / (255*0.5);
+		      		this.canvasCtx.fillStyle = '#DEDEDE';
+		      		if(temp>0){
+		      			this.canvasCtx.fillRect(i*sliceWidth,HEIGHT*(1-rate-0.5),sliceWidth,HEIGHT*rate);
+		      		}else{
+		      			this.canvasCtx.fillRect(i*sliceWidth,HEIGHT*(1-rate-0.5)+HEIGHT*rate,sliceWidth,HEIGHT*rate);
+		      		}
 		      	}
 		      	this.canvasCtx.restore();	
 	        },
