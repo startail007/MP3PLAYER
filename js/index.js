@@ -470,7 +470,7 @@ window.onload = function() {
 	        },
 	        goplay:function(index){
 	        	if(index!==this.songIndex){
-	        		this.advertiseShow(0,this.playList[temp]);
+	        		this.advertiseShow(0,index);
 	        	}else{
 	        		this.btn_play_click();
 	        	}
