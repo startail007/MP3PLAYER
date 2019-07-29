@@ -433,7 +433,9 @@ window.onload = function() {
 		      	this.canvasCtx.lineTo(0, HEIGHT);
 		      	for(var i = 0; i < this.wave.length; i++) {
 		      		var temp = this.wave[i]-255*0.5;
-		      		var rate = EasingFunctions.easeInOutQuad(2*(0.5-Math.abs(i/(this.wave.length-1)-0.5)))*Math.abs(temp) / (255*0.5);
+		      		var t = i/(this.wave.length-1);
+		      		var y = this.bezier(0,1,0,t);
+		      		var rate = y*Math.abs(temp) / (255*0.5);
 		      		this.canvasCtx.fillStyle = '#DEDEDE';
 		      		if(temp>0){
 		      			this.canvasCtx.fillRect(i*sliceWidth,HEIGHT*(1-rate-0.5),sliceWidth,HEIGHT*rate);
@@ -442,6 +444,9 @@ window.onload = function() {
 		      		}
 		      	}
 		      	this.canvasCtx.restore();	
+	        },
+	        bezier:function(p0, p1, p2, t){
+	        	return (1-t)*(1-t)*p0 + 2*t*(1-t)*p1 + t*t*p2;
 	        },
         	getNumberList:function(len,randomBool){
         		var random = [];
