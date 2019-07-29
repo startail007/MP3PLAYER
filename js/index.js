@@ -317,7 +317,7 @@ window.onload = function() {
         	timeRate:0,
         	volumeRate:1,
         	audio:null,
-        	repeatIndex:0,
+        	repeatIndex:1,
         	repeatTypes:["","all","one"],
         	shufflePlayback:false,
         	playList:[],

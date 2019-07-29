@@ -283,6 +283,7 @@ body{
 	background-position: center;
 	transition: background-image .3s;
 	cursor: pointer;
+    margin: 0px 5px;
 }
 .control #btn_shufflePlayback{
 	background-image: url(../img/btn_shufflePlayback.svg);
@@ -598,6 +599,9 @@ body{
 	}
 	.control{
 		display: inline-flex;
+	}
+	.control > .btn{
+	    margin: 0px;
 	}
 	.title .btn{
 		left: auto;
