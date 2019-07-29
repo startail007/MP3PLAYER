@@ -24,6 +24,7 @@ body{
 	max-width: 375px;
     min-height: 600px;
 	max-height: 800px;
+    box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.25);
 }
 .appContent{
 	position: absolute;
