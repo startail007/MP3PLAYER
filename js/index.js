@@ -315,6 +315,7 @@ window.onload = function() {
         	currentlyTime:40*2,
         	totalTime:60*5,
         	timeRate:0,
+        	volumeRate:1,
         	audio:null,
         	repeatIndex:0,
         	repeatTypes:["","all","one"],
@@ -329,7 +330,8 @@ window.onload = function() {
         	dataArray:null,
         	canvasCtx:null,
         	analyser:null,
-        	wave:[]
+        	wave:[],
+        	mute:false
         },
         mounted: function() {
         	this.audio = new Audio(this.currentlySrc);
@@ -338,7 +340,7 @@ window.onload = function() {
         	this.audio.addEventListener("ended", this.ended);
         	this.playList = this.getNumberList(this.albums[this.albumIndex].length,this.shufflePlayback);
         	this.songIndex = this.playList[0];	
-        	this.wave = new Array(64);
+        	this.wave = new Array(128);
 			for(var i=0;i<this.wave.length;i++){
 				this.wave[i] = 255*0.5;
 			}
@@ -348,8 +350,19 @@ window.onload = function() {
         	this.updateAnimation();
         },
         watch:{
+        	mute:function(val){ 
+        		if(val){
+        			this.audio.volume = 0;
+        		}else{
+        			this.audio.volume = this.volumeRate;
+        		}      		
+        	},
         	timeRate:function(val){
         		this.currentlyTime = val*this.totalTime;
+        	},
+        	volumeRate:function(val){
+        		this.audio.volume = val;
+        		this.mute = false;
         	},
         	currentlyTime:function(val){
         		var timeRate = 0;
@@ -614,6 +627,9 @@ window.onload = function() {
 		        	this.songIndex = this.nextPlay.songIndex;
 		        	this.setSong();
 	        	}
+	        },
+	        btn_mute_click:function(){	        	 		
+	        	this.mute = !this.mute;
 	        }
 		},
 	    computed:{
@@ -634,6 +650,9 @@ window.onload = function() {
 	    	},
 	    	repeatType:function(){
 	    		return this.repeatTypes[this.repeatIndex];
+	    	},
+	    	isMobile:function(){
+	    		return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 	    	}
 		}
     });

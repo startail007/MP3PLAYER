@@ -16,79 +16,89 @@
 	</style>
 </head>
 <body>
-	<div class="app noSelect" id="app" v-cloak>
-		<div class="appContent">
-			<div class="page">
-				<div class="album" :style="{backgroundImage: 'url('+currentlyBg+')'}"></div>
-				<div class="content">
-					<div class="box">
-						<div class="boxframe"></div>
+	<div class="mainAPP">
+		<div class="mainContent">
+			<div class="app noSelect" id="app" v-cloak>
+				<div class="appContent">
+					<div class="page">
+						<div class="album" :style="{backgroundImage: 'url('+currentlyBg+')'}"></div>
+						<div class="content">
+							<div class="box">
+								<div class="boxframe"></div>
+							</div>
+							<div class="title">
+								<div class="text" id="song">{{currentlySong}}</div>
+								<div class="text" id="singer">{{currentlySinger}}</div>
+								<div class="btn" id="btn_list" @click="list_click"></div>
+							</div>
+							<div class="progressRate">
+								<canvas ref="wave" class="wave"></canvas>
+								<drag-bar-component class="range" :rate-x.sync="timeRate" @dragstart="dragstart" @dragend="dragend" @dragmove="dragmove" @beforedragmove="beforedragmove">
+									<div class="btn"></div>
+								</drag-bar-component>
+								<div class="time">
+									<div class="text" id="currentTime">{{formatTime(currentlyTime)}}</div>
+									<div class="text" id="totalTime">{{formatTime(totalTime)}}</div>
+								</div>
+							</div>
+							<div class="control">
+								<div class="btn" id="btn_shufflePlayback" @click="btn_shufflePlayback_click" :class="{active:shufflePlayback}"></div>
+								<div class="btn" id="btn_rewind" @click="btn_rewind_click"></div>
+								<div class="btn" id="btn_play" @click="btn_play_click" :class="{playing:playing}"></div>
+								<div class="btn" id="btn_fast" @click="btn_fast_click"></div>
+								<div class="btn" id="btn_repeat" @click="btn_repeat_click" :class="[repeatType]"></div>		
+							</div>
+							<div class="volumeRate" v-if="!isMobile">								
+								<div class="btn" id="btn_mute" @click="btn_mute_click" :class="{mute:mute}"></div>
+								<drag-bar-component class="range" :rate-x.sync="volumeRate">
+									<div class="btn"></div>
+								</drag-bar-component>
+							</div>
+						</div>	
 					</div>
-					<div class="title">
-						<div class="text" id="song">{{currentlySong}}</div>
-						<div class="text" id="singer">{{currentlySinger}}</div>
-						<div class="btn" id="btn_list" @click="list_click"></div>
-					</div>
-					<div class="progressRate">
-						<canvas ref="wave" class="wave"></canvas>
-						<drag-bar-component class="range" :rate-x.sync="timeRate" @dragstart="dragstart" @dragend="dragend" @dragmove="dragmove" @beforedragmove="beforedragmove">
-							<div class="btn"></div>
-						</drag-bar-component>
-					</div>
-					<div class="time">
-						<div class="text" id="currentTime">{{formatTime(currentlyTime)}}</div>
-						<div class="text" id="totalTime">{{formatTime(totalTime)}}</div>
-					</div>
-					<div class="control">
-						<div class="btn" id="btn_shufflePlayback" @click="btn_shufflePlayback_click" :class="{active:shufflePlayback}"></div>
-						<div class="btn" id="btn_rewind" @click="btn_rewind_click"></div>
-						<div class="btn" id="btn_play" @click="btn_play_click" :class="{playing:playing}"></div>
-						<div class="btn" id="btn_fast" @click="btn_fast_click"></div>
-						<div class="btn" id="btn_repeat" @click="btn_repeat_click" :class="[repeatType]"></div>
-					</div>
-				</div>	
+					<transition name="playList">
+						<div class="page" id="playList" v-if="playListBool">
+							<div class="album" :style="{backgroundImage: 'url('+currentlyBg+')'}"></div>
+							<div  class="content">
+								<div class="list">
+									<div class="item" v-for="(item,index) in currentlyAlbum" :class="{active:index===songIndex}" @click="goplay(index)">
+										<div class="itemContent">
+											<div class="song">{{item.song}}</div>
+											<div class="singer">{{item.singer}}</div>
+										</div>
+										<div class="right">
+											<div class="btn" :class="{playing:index===songIndex&&playing}"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="titleTop">
+								<div class="text">PLAYLIST</div>
+								<div class="btn" id="btn_back" @click="back_click"></div>
+							</div>
+						</div>
+					</transition>
+					<transition name="advertise">
+						<div class="advertise" v-if="advertiseBool">
+							<div class="advertiseContent">
+								<div class="advertiseMain">
+									<div class="advertiseMainBox" :style="{backgroundImage: 'url('+currentlyBg+')'}">
+										<div class="advertiseMainBoxContent">
+											<div class="song">{{currentlySong}}</div>
+											<div class="singer">{{currentlySinger}}</div>
+											<div class="btn" @click="follow_click">FOLLOW</div>
+										</div>
+									</div>
+									<div class="text" @click="no_click">
+										No, thanks.
+									</div>
+								</div>
+							</div>
+						</div>
+					</transition>
+		        </div>
 			</div>
-			<transition name="playList">
-				<div class="page" id="playList" v-if="playListBool">
-					<div class="album" :style="{backgroundImage: 'url('+currentlyBg+')'}"></div>
-					<div  class="content">
-						<div class="list">
-							<div class="item" v-for="(item,index) in currentlyAlbum" :class="{active:index===songIndex}" @click="goplay(index)">
-								<div class="itemContent">
-									<div class="song">{{item.song}}</div>
-									<div class="singer">{{item.singer}}</div>
-								</div>
-								<div class="right">
-									<div class="btn" :class="{playing:index===songIndex&&playing}"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="titleTop">
-						<div class="text">PLAYLIST</div>
-						<div class="btn" id="btn_back" @click="back_click"></div>
-					</div>
-				</div>
-			</transition>
-			<transition name="advertise">
-				<div class="advertise" v-if="advertiseBool">
-					<div class="advertiseContent">
-						<div class="advertiseMain">
-							<div class="advertiseMainBox" :style="{backgroundImage: 'url('+currentlyBg+')'}">
-								<div class="advertiseMainBoxContent">
-									<div class="song">{{currentlySong}}</div>
-									<div class="singer">{{currentlySinger}}</div>
-									<div class="btn" @click="follow_click">FOLLOW</div>
-								</div>
-							</div>
-							<div class="text" @click="no_click">
-								No, thanks.
-							</div>
-						</div>
-					</div>
-				</div>
-			</transition>
-        </div>
+		</div>
 	</div>
 </body>
 </html>

@@ -11,7 +11,21 @@ body{
     height: 100%;
 	margin:0;
 	font-family: 'Merriweather Sans', sans-serif;
-    background-color: #888;
+    background-color: #fff;
+}
+.mainAPP{
+    position: absolute;
+    display: table;
+    width: 100%;
+    height: 100%;
+    font-size: 0;
+    border-collapse: collapse;
+}
+.mainContent{
+    position: relative;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
 }
 .app{
 	position: relative;
@@ -21,10 +35,11 @@ body{
 	width: 100%;
 	height: 100%;
     margin:0 auto;
-	max-width: 420px;
+	max-width: 1280px;
     min-height: 600px;
-	max-height: 820px;
-    box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.25);
+	max-height: 800px;
+    /*box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.25);*/
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
 }
 .appContent{
 	position: absolute;
@@ -45,11 +60,47 @@ body{
 	display: inline-block;
 	padding: 0px 5px;
 	box-sizing: border-box;
-	margin: 5px 0px;
+	margin: 10px 0px;
 	width: 100%;
+}
+.volumeRate{
+	position: absolute;
+    display: inline-flex;
+    padding: 0px 5px;
+    box-sizing: border-box;
+    margin: 5px 0px;
+    width: 100%;
+    right: 25px;
+    bottom: 60px;
+    max-width: 160px;    
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.volumeRate > .btn{
+	position: relative;
+	display: inline-block;
+	width: 30px;
+	height: 30px;	
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
 	cursor: pointer;
+	margin-right: 10px;
+	background-image: url(../img/volume_up.svg);
+	border-radius: 30px;
+}
+.volumeRate > .btn.mute{	
+	background-image: url(../img/volume_off.svg);
+}
+.volumeRate .range{
+	display: inline-block;
+    flex: 1;
 }
 .progressRate .range{
+	margin-bottom: 10px;
+}
+.range{
 	position: relative;
 	display: block;
 	width: 100%;
@@ -58,8 +109,9 @@ body{
 	/*margin: 10px 0px;*/
 	padding: 0px 0px;
 	box-sizing: border-box;
+	cursor: pointer;
 }
-.progressRate .range .progress{			
+.range .progress{			
 	position: absolute;
 	display: block;
 	width: 100%;
@@ -67,7 +119,7 @@ body{
 	border-radius: 2.5px;
 	margin-top: -1px;
 }
-.progressRate .range .progress:before{
+.range .progress:before{
 	content: "";
 	position: absolute;
 	display: block;
@@ -77,28 +129,28 @@ body{
 	margin-top: -10px;
 	top: 1px;
 }
-.progressRate .range .progress .bg{			
+.range .progress .bg{			
 	position: absolute;
 	display: block;
 	background-color: #DEDEDE;
 	width: 100%;
 	height: 100%;
 }
-.progressRate .range .progress .rate{			
+.range .progress .rate{			
 	position: absolute;
 	display: block;
 	background-color: #413D3D;
 	width: 0%;
 	height: 100%;
 }		
-.progressRate .drag_btn{
+.range .drag_btn{
 	position: absolute;
 	display: block;
 	width: 0px;
 	height: 0px;
 	top: 1px;
 }
-.progressRate .btn{
+.range .btn{
 	position: relative;
 	display: block;
 	width: 10px;
@@ -147,7 +199,7 @@ body{
 	width: 100%;
 	height: 100%;
 	/*background-image: url(../img/8C9Evy.png);*/
-	background-position: center top;
+	background-position: center;
 	background-size: 100% auto;
 	background-repeat: no-repeat;
 	transition: background-image .3s;
@@ -155,7 +207,7 @@ body{
 .title{
 	position: relative;
 	display: inline-block;
-    text-align: left;
+    text-align: center;
     padding: 0px 0px;
     margin-bottom: 20px;
 	width: 100%;
@@ -169,7 +221,7 @@ body{
 	background-size: contain;
 	background-position: center;		
 	top: 50%;
-	right: 0px;
+	left: 0px;
 	margin-top: -15px;
 	cursor: pointer;
 }		
@@ -194,7 +246,6 @@ body{
 	font-size: 10px;
 	color: #AEAEAE;
 	height: 15px;
-    margin-bottom: 10px;
 	width: 100%;
 }
 .time .text{			
@@ -210,7 +261,7 @@ body{
 }
 .control{
 	position: relative;
-    display: inline-flex;
+    display: inline-block;
     height: 80px;
     text-align: center;
     line-height: 80px;
@@ -218,9 +269,9 @@ body{
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
-.control .btn{
+.control > .btn{
 	position: relative;
 	display: inline-block;
 	width: 45px;
@@ -263,7 +314,13 @@ body{
 .control #btn_repeat.one{
 	background-image: url(../img/btn_repeatOne.svg);
 }
-
+#playList{
+	max-width: 400px;
+    border-right: 1px solid #dedede;
+}
+#playList .album{
+	background-position: center top;
+}
 #playList .content{
 	top: 100px;
 	background-color: rgba(255, 255, 255, 0.8);   
@@ -394,6 +451,7 @@ body{
     left: 0px;
     padding: 80px 25px 80px;
     box-sizing: border-box;
+    visibility: hidden;
 }
 .boxframe{	
 	position: relative;
@@ -403,6 +461,8 @@ body{
     border: 10px solid #fff;
     filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.25));
     box-sizing: border-box;
+    max-width: 400px;
+    margin: 0 auto;
 }
 .advertise{
 	position: absolute;
@@ -449,6 +509,7 @@ body{
     color: #fff;
     text-decoration: underline;
 	cursor: pointer;
+	font-size: 16px;
 }
 .advertiseMainBoxContent{
 	position: absolute;
@@ -526,4 +587,33 @@ body{
 	height: 60px;
 	left: 0px;
 	top: -29px;
+}
+
+@media screen and (max-width: 600px){
+	.album{
+		background-position: center top;
+	}
+	.title{
+		text-align: left;
+	}
+	.control{
+		display: inline-flex;
+	}
+	.title .btn{
+		left: auto;
+		right: 0px;
+	}
+	.box{
+		visibility: initial;
+	}
+	#playList{
+		max-width: none;
+	    border-right: 0;
+	}
+	.volumeRate{
+	    right: auto;
+	    bottom: auto;
+	    max-width: none;
+		position: relative;
+	}
 }
