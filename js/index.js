@@ -429,6 +429,11 @@ window.onload = function() {
 
 		      	var sliceWidth = WIDTH / this.wave.length;
 
+		      	var grd=this.canvasCtx.createLinearGradient(0,0,0,HEIGHT);
+				grd.addColorStop(0,"#FF0000");
+				grd.addColorStop(0.5,"#DEDEDE");
+				grd.addColorStop(1,"#00FF00");
+
 		      	this.canvasCtx.moveTo(WIDTH, HEIGHT);
 		      	this.canvasCtx.lineTo(0, HEIGHT);
 		      	for(var i = 0; i < this.wave.length; i++) {
@@ -436,7 +441,8 @@ window.onload = function() {
 		      		var t = i/(this.wave.length-1);
 		      		var y = this.bezier(0,1,0,t);
 		      		var rate = y*Math.abs(temp) / (255*0.5);
-		      		this.canvasCtx.fillStyle = '#DEDEDE';
+		      		//this.canvasCtx.fillStyle = '#DEDEDE';
+					this.canvasCtx.fillStyle = grd;
 		      		if(temp>0){
 		      			this.canvasCtx.fillRect(i*sliceWidth,HEIGHT*(1-rate-0.5),sliceWidth,HEIGHT*rate);
 		      		}else{
