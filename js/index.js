@@ -470,7 +470,7 @@ window.onload = function() {
 	        },
 	        goplay:function(index){
 	        	if(index!==this.songIndex){
-	        		this.advertiseShow(0,index);
+	        		this.advertiseShow(0,index,true);
 	        	}else{
 	        		this.btn_play_click();
 	        	}
@@ -487,15 +487,16 @@ window.onload = function() {
 	        no_click:function(){
 	        	this.advertiseHide();
 	        },
-	        advertiseShow:function(albumIndex,songIndex){
+	        advertiseShow:function(albumIndex,songIndex,playing){
 	        	if(Math.random()>0.5){
 	        		this.nextPlay.albumIndex = albumIndex;
 	        		this.nextPlay.songIndex = songIndex;
         			this.advertiseBool = true;
-	        		this.temp_playing = this.playing;
+        			this.temp_playing = playing?playing:this.playing;	        		
     				this.playing = false;
     				this.audio.pause();
     			}else{
+    				this.playing = playing?playing:this.playing;
     				this.albumIndex = albumIndex;
 		        	this.songIndex = songIndex;
 		        	this.setSong();
