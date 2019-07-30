@@ -377,7 +377,6 @@ window.onload = function() {
         },
         methods: {
         	createWave:function(){
-        		console.log('aaa');
         		if(!this.analyser){
 					var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 					this.analyser = audioCtx.createAnalyser();
@@ -392,8 +391,6 @@ window.onload = function() {
         	},
         	updateAnimation:function(){			    
 				requestAnimationFrame(this.updateAnimation);
-				//console.log(this.analyser);
-				//console.log(a);
 				if(this.playing){
 					this.analyser.getByteTimeDomainData(this.dataArray);
 			      	for(var i = 0; i < this.wave.length; i++) {
@@ -405,44 +402,9 @@ window.onload = function() {
 				var HEIGHT = this.$refs.wave.height;
 
 		      	this.canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-		      	/*this.canvasCtx.save();
-		      	this.canvasCtx.fillStyle = 'rgb(210, 210, 210)';
-		      	this.canvasCtx.beginPath();
-
-		      	var sliceWidth = WIDTH * 1.0 / (this.wave.length-2);
-
-		      	this.canvasCtx.moveTo(WIDTH, HEIGHT);
-		      	this.canvasCtx.lineTo(0, HEIGHT);
-		      	for(var i = 0; i < this.wave.length; i++) {
-		          	this.canvasCtx.lineTo(i*sliceWidth, HEIGHT*(1-this.wave[i] / 256));
-		      	}
-		      	this.canvasCtx.closePath();
-		      	this.canvasCtx.fill();	
-		      	this.canvasCtx.restore();*/	
-
-
-		      	/*this.canvasCtx.save();
-
-		      	var sliceWidth = WIDTH / this.wave.length;
-
-		      	this.canvasCtx.moveTo(WIDTH, HEIGHT);
-		      	this.canvasCtx.lineTo(0, HEIGHT);
-		      	for(var i = 0; i < this.wave.length; i++) {
-		      		var temp = this.wave[i]-255*0.5;
-		      		if(temp>0){
-		      			this.canvasCtx.fillStyle = 'rgb(200, 200, 200)';
-		      		}else{
-		      			this.canvasCtx.fillStyle = 'rgb(240, 240, 240)';
-		      		}
-		      		var rate = Math.abs(temp) / (255*0.5);
-		      		this.canvasCtx.fillRect(i*sliceWidth,HEIGHT*(1-rate),sliceWidth,HEIGHT*rate);
-		      	}
-		      	this.canvasCtx.restore();*/
 
 		      	this.canvasCtx.save();
-
 		      	var sliceWidth = WIDTH / this.wave.length;
-
 		      	var grd=this.canvasCtx.createLinearGradient(0,0,0,HEIGHT);
 				grd.addColorStop(0,"#FF0000");
 				grd.addColorStop(0.5,"#DEDEDE");
@@ -452,15 +414,13 @@ window.onload = function() {
 		      	this.canvasCtx.lineTo(0, HEIGHT);
 		      	for(var i = 0; i < this.wave.length; i++) {
 		      		var temp = this.wave[i]-255*0.5;
-		      		var t = i/(this.wave.length-1);
-		      		var y = this.bezier(0,2,0,t);
-		      		var rate = y*Math.abs(temp) / (255*0.5);
-		      		//this.canvasCtx.fillStyle = '#DEDEDE';
+		      		var rate = 0.5*this.bezier(0,2,0,i/(this.wave.length-1))*Math.abs(temp) / (255*0.5);
+
 					this.canvasCtx.fillStyle = grd;
 		      		if(temp>0){
-		      			this.canvasCtx.fillRect(i*sliceWidth,HEIGHT*(1-rate-0.5),sliceWidth,HEIGHT*rate);
+		      			this.canvasCtx.fillRect(i*sliceWidth,HEIGHT*(0.5-rate),sliceWidth,HEIGHT*rate);
 		      		}else{
-		      			this.canvasCtx.fillRect(i*sliceWidth,HEIGHT*(1-rate-0.5)+HEIGHT*rate,sliceWidth,HEIGHT*rate);
+		      			this.canvasCtx.fillRect(i*sliceWidth,HEIGHT*0.5,sliceWidth,HEIGHT*rate);
 		      		}
 		      	}
 		      	this.canvasCtx.restore();	
