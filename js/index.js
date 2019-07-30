@@ -377,6 +377,7 @@ window.onload = function() {
         },
         methods: {
         	createWave:function(){
+        		console.log('aaa');
         		if(!this.analyser){
 					var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 					this.analyser = audioCtx.createAnalyser();
@@ -391,7 +392,7 @@ window.onload = function() {
         	},
         	updateAnimation:function(){			    
 				requestAnimationFrame(this.updateAnimation);
-				
+				//console.log(this.analyser);
 				//console.log(a);
 				if(this.playing){
 					this.analyser.getByteTimeDomainData(this.dataArray);
@@ -587,6 +588,7 @@ window.onload = function() {
 	        },
 	        goplay:function(index){
 	        	if(index!==this.songIndex){
+	        		this.createWave();
 	        		this.advertiseShow(0,index,true);
 	        	}else{
 	        		this.btn_play_click();
