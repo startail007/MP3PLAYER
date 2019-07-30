@@ -328,8 +328,8 @@ body{
 	padding: 0px;
 }
 #playList .content:before{
-    background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0),rgba(255, 255, 255, 0.8));
-	background-image: linear-gradient(rgba(255, 255, 255, 0),rgba(255, 255, 255, 0.8));
+    background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0),#fff);
+	background-image: linear-gradient(rgba(255, 255, 255, 0),#fff);
 }
 .list{
 	position: absolute;
