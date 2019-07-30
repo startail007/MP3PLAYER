@@ -297,15 +297,15 @@ window.onload = function() {
         data: {
         	albums:[
         		[
-        			{song:"Species",singer:"Diamond Ortiz",src:"song/album01/Species.mp3",bg:"img/8C9Evy.png"},
-        			{song:"Irie",singer:"Quincas Moreira",src:"song/album01/Irie.mp3",bg:"img/mZdA12.png"},
-        			{song:"Bed and Breakfast02",singer:"The 126ers",src:"song/album01/Bed_and_Breakfast.mp3",bg:"img/8C9Evy.png"},
-        			{song:"Central Park",singer:"Quincas Moreira",src:"song/album01/Central_Park.mp3",bg:"img/mZdA12.png"},
-        			{song:"There's Life Out There",singer:"Cooper Cannell",src:"song/album01/There_s_Life_Out_There.mp3",bg:"img/8C9Evy.png"},
-        			{song:"Ticker",singer:"Silent Partner",src:"song/album01/Ticker.mp3",bg:"img/mZdA12.png"},
-        			{song:"Urban Lullaby",singer:"Jimmy Fontanez/Doug Maxwell",src:"song/album01/Urban_Lullaby.mp3",bg:"img/8C9Evy.png"},
-        			{song:"Mamas",singer:"Josh Lippi & The Overtimers",src:"song/album01/Mamas.mp3",bg:"img/mZdA12.png"},
-        			{song:"Corporate Mellow Groove",singer:"Doug Maxwell",src:"song/album01/Corporate_Mellow_Groove.mp3",bg:"img/8C9Evy.png"}
+        			{song:"Species",singer:"Diamond Ortiz",src:"song/album01/Species.mp3",bg:"song/album01/Species.jpg"},
+        			{song:"Irie",singer:"Quincas Moreira",src:"song/album01/Irie.mp3",bg:"song/album01/Irie.jpg"},
+        			{song:"Bed and Breakfast02",singer:"The 126ers",src:"song/album01/Bed_and_Breakfast.mp3",bg:"song/album01/Bed_and_Breakfast.jpg"},
+        			{song:"Central Park",singer:"Quincas Moreira",src:"song/album01/Central_Park.mp3",bg:"song/album01/Central_Park.jpg"},
+        			{song:"There's Life Out There",singer:"Cooper Cannell",src:"song/album01/There_s_Life_Out_There.mp3",bg:"song/album01/There_s_Life_Out_There.jpg"},
+        			{song:"Ticker",singer:"Silent Partner",src:"song/album01/Ticker.mp3",bg:"song/album01/Ticker.jpg"},
+        			{song:"Urban Lullaby",singer:"Jimmy Fontanez/Doug Maxwell",src:"song/album01/Urban_Lullaby.mp3",bg:"song/album01/Urban_Lullaby.jpg"},
+        			{song:"Mamas",singer:"Josh Lippi & The Overtimers",src:"song/album01/Mamas.mp3",bg:"song/album01/Mamas.jpg"},
+        			{song:"Corporate Mellow Groove",singer:"Doug Maxwell",src:"song/album01/Corporate_Mellow_Groove.mp3",bg:"song/album01/Corporate_Mellow_Groove.jpg"}
         		]
         	],
         	albumIndex:0,
