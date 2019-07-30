@@ -409,9 +409,7 @@ window.onload = function() {
 				grd.addColorStop(0,"#FF0000");
 				grd.addColorStop(0.5,"#DEDEDE");
 				grd.addColorStop(1,"#00FF00");
-
-		      	this.canvasCtx.moveTo(WIDTH, HEIGHT);
-		      	this.canvasCtx.lineTo(0, HEIGHT);
+				
 		      	for(var i = 0; i < this.wave.length; i++) {
 		      		var temp = this.wave[i]-255*0.5;
 		      		var rate = 0.5*this.bezier(0,2,0,i/(this.wave.length-1))*Math.abs(temp) / (255*0.5);
