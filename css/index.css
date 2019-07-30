@@ -353,6 +353,8 @@ body{
 	position: relative;
 	display: table-cell;
 	vertical-align: middle;
+	text-align: left;
+    padding: 0px 25px;
 }
 .itemContent:after{
 	content: "";
