@@ -340,7 +340,7 @@ window.onload = function() {
         	this.audio.addEventListener("ended", this.ended);
         	this.playList = this.getNumberList(this.albums[this.albumIndex].length,this.shufflePlayback);
         	this.songIndex = this.playList[0];	
-        	this.wave = new Array(128);
+        	this.wave = new Array(32);
 			for(var i=0;i<this.wave.length;i++){
 				this.wave[i] = 255*0.5;
 			}
@@ -394,33 +394,46 @@ window.onload = function() {
 				if(this.playing){
 					this.analyser.getByteTimeDomainData(this.dataArray);
 			      	for(var i = 0; i < this.wave.length; i++) {
-			      		this.wave[i] = this.dataArray[i*this.bufferLength/this.wave.length];
+			      		//this.wave[i] = this.dataArray[i*this.bufferLength/this.wave.length];
+			      		this.wave[i] = this.wave[i] + (this.dataArray[i*this.bufferLength/this.wave.length]-this.wave[i])*0.7;
 			      	}	
-			    }	
+			    }else{
+			    	for(var i = 0; i < this.wave.length; i++) {
+			      		this.wave[i] = this.wave[i] + (255*0.5-this.wave[i])*0.05;
+			      	}
+			    }
 			    
 			    var WIDTH = this.$refs.wave.width;
 				var HEIGHT = this.$refs.wave.height;
 
-		      	this.canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+		      	//this.canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+		      	this.canvasCtx.save();
+		      	this.canvasCtx.globalCompositeOperation="destination-out";
+				this.canvasCtx.fillStyle="rgba(0,0,0,0.3)";
+				this.canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+		      	this.canvasCtx.restore();
 
 		      	this.canvasCtx.save();
+		      	this.canvasCtx.globalCompositeOperation="source-over";
 		      	var sliceWidth = WIDTH / this.wave.length;
 		      	var grd=this.canvasCtx.createLinearGradient(0,0,0,HEIGHT);
-				grd.addColorStop(0,"#FF0000");
+				grd.addColorStop(0,"#00007f");
 				grd.addColorStop(0.5,"#DEDEDE");
-				grd.addColorStop(1,"#00FF00");
-				
+				grd.addColorStop(1,"#00007f");
+
+				this.canvasCtx.strokeStyle = grd;
+				this.canvasCtx.lineWidth = 2;
+				this.canvasCtx.beginPath();
+				this.canvasCtx.moveTo(0,HEIGHT*0.5);
 		      	for(var i = 0; i < this.wave.length; i++) {
 		      		var temp = this.wave[i]-255*0.5;
-		      		var rate = 0.5*this.bezier(0,2,0,i/(this.wave.length-1))*Math.abs(temp) / (255*0.5);
-
-					this.canvasCtx.fillStyle = grd;
-		      		if(temp>0){
-		      			this.canvasCtx.fillRect(i*sliceWidth,HEIGHT*(0.5-rate),sliceWidth,HEIGHT*rate);
-		      		}else{
-		      			this.canvasCtx.fillRect(i*sliceWidth,HEIGHT*0.5,sliceWidth,HEIGHT*rate);
-		      		}
+		      		var rate = 0.5*this.bezier(0,2,0,i/(this.wave.length-1))*(temp) / (255*0.5);
+					this.canvasCtx.lineTo((i+0.5)*sliceWidth,HEIGHT*(0.5-rate));
 		      	}
+				this.canvasCtx.lineTo(WIDTH,HEIGHT*0.5);
+
+		      	this.canvasCtx.closePath();
+		      	this.canvasCtx.stroke();
 		      	this.canvasCtx.restore();	
 	        },
 	        bezier:function(p0, p1, p2, t){
