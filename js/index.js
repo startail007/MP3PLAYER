@@ -338,15 +338,10 @@ window.onload = function() {
       message001: "aaa"
     },
     mounted: function() {
-      /*try {
-        alert("bbb0");*/
       this.audio = new Audio(this.currentlySrc);
       this.audio.addEventListener("canplay", this.canplay);
       this.audio.addEventListener("timeupdate", this.timeupdate);
       this.audio.addEventListener("ended", this.ended);
-      this.audio.addEventListener("error", function(e) {
-        alert("sssss");
-      });
       this.playList = this.getNumberList(this.albums[this.albumIndex].length, this.shufflePlayback);
       this.songIndex = this.playList[0];
       this.wave = new Array(32);
@@ -357,9 +352,6 @@ window.onload = function() {
       this.$refs.wave.height = this.$refs.wave.offsetHeight;
       this.canvasCtx = this.$refs.wave.getContext("2d");
       this.updateAnimation();
-      /*} catch (e) {
-        alert("ccc0");
-      }*/
     },
     watch: {
       mute: function(val) {
@@ -482,7 +474,7 @@ window.onload = function() {
         return random;
       },
       btn_play_click: function() {
-        this.createWave();
+        //this.createWave();
         this.playing = !this.playing;
         if (this.playing) {
           this.audio.play();
@@ -536,12 +528,9 @@ window.onload = function() {
       canplay: function(e) {
         this.currentlyTime = this.audio.currentTime;
         this.totalTime = this.audio.duration;
-
-        this.message001 = "asdasdasdasd";
       },
       timeupdate: function(e) {
         this.currentlyTime = this.audio.currentTime;
-        this.message001 = "aaaa" + this.audio.currentTime;
       },
       ended: function(e) {
         var type = this.repeatType;
