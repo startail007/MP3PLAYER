@@ -339,6 +339,7 @@ window.onload = function() {
     },
     mounted: function() {
       this.audio = new Audio(this.currentlySrc);
+      this.audio.crossOrigin = "anonymous";
       this.audio.addEventListener("canplay", this.canplay);
       this.audio.addEventListener("timeupdate", this.timeupdate);
       this.audio.addEventListener("ended", this.ended);
