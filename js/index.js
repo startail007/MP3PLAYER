@@ -538,6 +538,7 @@ window.onload = function() {
       },
       timeupdate: function(e) {
         this.currentlyTime = this.audio.currentTime;
+        this.message001 = "aaaa" + this.audio.currentTime;
       },
       ended: function(e) {
         var type = this.repeatType;
