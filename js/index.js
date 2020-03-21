@@ -334,12 +334,10 @@ window.onload = function() {
       canvasCtx: null,
       analyser: null,
       wave: [],
-      mute: false,
-      message001: "aaa"
+      mute: false
     },
     mounted: function() {
       this.audio = new Audio(this.currentlySrc);
-      this.audio.crossOrigin = "anonymous";
       this.audio.addEventListener("canplay", this.canplay);
       this.audio.addEventListener("timeupdate", this.timeupdate);
       this.audio.addEventListener("ended", this.ended);
@@ -382,9 +380,8 @@ window.onload = function() {
     },
     methods: {
       createWave: function() {
-        if (!this.analyser) {
+        if (!this.isIos() && !this.analyser) {
           var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
           this.analyser = audioCtx.createAnalyser();
           //analyser.fftSize = 2048;
           this.bufferLength = this.analyser.fftSize;
@@ -632,6 +629,9 @@ window.onload = function() {
       },
       isMobile: function() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      },
+      isIos: function() {
+        return /(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent);
       }
     }
   });
