@@ -48,7 +48,7 @@
                   <div class="btn" id="btn_fast" @click="btn_fast_click"></div>
                   <div class="btn" id="btn_repeat" @click="btn_repeat_click" :class="[repeatType]"></div>
                 </div>
-                <div class="volumeRate">
+                <div class="volumeRate" v-if="!isMobile">
                   <div class="btn" id="btn_mute" @click="btn_mute_click" :class="{mute:mute}"></div>
                   <drag-bar-component class="range" :rate-x.sync="volumeRate">
                     <div class="btn"></div>
