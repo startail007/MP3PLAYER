@@ -383,16 +383,22 @@ window.onload = function() {
     methods: {
       createWave: function() {
         if (!this.analyser) {
-          var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          alert("aaa");
+          try {
+            var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-          this.analyser = audioCtx.createAnalyser();
-          //analyser.fftSize = 2048;
-          this.bufferLength = this.analyser.fftSize;
-          this.dataArray = new Uint8Array(this.bufferLength);
+            this.analyser = audioCtx.createAnalyser();
+            //analyser.fftSize = 2048;
+            this.bufferLength = this.analyser.fftSize;
+            this.dataArray = new Uint8Array(this.bufferLength);
 
-          var source1 = audioCtx.createMediaElementSource(this.audio);
-          source1.connect(this.analyser);
-          this.analyser.connect(audioCtx.destination);
+            var source1 = audioCtx.createMediaElementSource(this.audio);
+            source1.connect(this.analyser);
+            this.analyser.connect(audioCtx.destination);
+            alert("bbb");
+          } catch (e) {
+            alert("ccc");
+          }
         }
       },
       updateAnimation: function() {
