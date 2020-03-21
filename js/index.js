@@ -474,7 +474,7 @@ window.onload = function() {
         return random;
       },
       btn_play_click: function() {
-        //this.createWave();
+        this.createWave();
         this.playing = !this.playing;
         if (this.playing) {
           this.audio.play();
