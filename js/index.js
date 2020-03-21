@@ -380,7 +380,7 @@ window.onload = function() {
     },
     methods: {
       createWave: function() {
-        if (!this.isIos() && !this.analyser) {
+        if (!this.isIos && !this.analyser) {
           var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
           this.analyser = audioCtx.createAnalyser();
           //analyser.fftSize = 2048;
