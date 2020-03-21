@@ -338,25 +338,28 @@ window.onload = function() {
       message001: "aaa"
     },
     mounted: function() {
-      try {
-        alert("bbb0");
-        this.audio = new Audio(this.currentlySrc);
-        this.audio.addEventListener("canplay", this.canplay);
-        this.audio.addEventListener("timeupdate", this.timeupdate);
-        this.audio.addEventListener("ended", this.ended);
-        this.playList = this.getNumberList(this.albums[this.albumIndex].length, this.shufflePlayback);
-        this.songIndex = this.playList[0];
-        this.wave = new Array(32);
-        for (var i = 0; i < this.wave.length; i++) {
-          this.wave[i] = 255 * 0.5;
-        }
-        this.$refs.wave.width = this.$refs.wave.offsetWidth;
-        this.$refs.wave.height = this.$refs.wave.offsetHeight;
-        this.canvasCtx = this.$refs.wave.getContext("2d");
-        this.updateAnimation();
-      } catch (e) {
-        alert("ccc0");
+      /*try {
+        alert("bbb0");*/
+      this.audio = new Audio(this.currentlySrc);
+      this.audio.addEventListener("canplay", this.canplay);
+      this.audio.addEventListener("timeupdate", this.timeupdate);
+      this.audio.addEventListener("ended", this.ended);
+      this.audio.addEventListener("error", function(e) {
+        alert("sssss");
+      });
+      this.playList = this.getNumberList(this.albums[this.albumIndex].length, this.shufflePlayback);
+      this.songIndex = this.playList[0];
+      this.wave = new Array(32);
+      for (var i = 0; i < this.wave.length; i++) {
+        this.wave[i] = 255 * 0.5;
       }
+      this.$refs.wave.width = this.$refs.wave.offsetWidth;
+      this.$refs.wave.height = this.$refs.wave.offsetHeight;
+      this.canvasCtx = this.$refs.wave.getContext("2d");
+      this.updateAnimation();
+      /*} catch (e) {
+        alert("ccc0");
+      }*/
     },
     watch: {
       mute: function(val) {
