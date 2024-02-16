@@ -5,4 +5,4 @@
 ##### 1.暫停跟撥放音樂、切換歌曲、播放順序列表、循環撥放的方式
 ##### 2.擷取音頻產生波紋上下跳動效果(IOS不支援)
 ### DEMO
-[線上觀看](https://virtools.github.io/MP3PLAYER/)
+[線上觀看](https://startail007.github.io/MP3PLAYER/)
